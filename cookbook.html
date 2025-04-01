@@ -434,6 +434,7 @@
 </div>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-to-image"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // 分类筛选
@@ -581,10 +582,19 @@
 
             html2canvas(orderSection).then(canvas => {
                 // 创建一个下载链接
-                const link = document.createElement('a');
+                /*const link = document.createElement('a');
                 link.download = '我的订单.png';
                 link.href = canvas.toDataURL('image/png');
-                link.click();
+                link.click();*/
+                canvas.toBlob(function(blob) {
+                    try {
+                        saveAs(blob, '我的订单.png');
+                    } catch (e) {
+                        // 如果保存失败，使用替代方案
+                        const imgData = canvas.toDataURL('image/png');
+                        window.open(imgData, '_blank');
+                    }
+                });
             });
         });
     });
